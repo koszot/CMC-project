@@ -36,6 +36,8 @@ alternative_splicing_associated_genes <- function(isoforms.fpkm_FUN) {
 
 isoforms.AS <- alternative_splicing_associated_genes(isoforms)       # lefuttatjuk az AS szűrést
 
+rm(isoforms)
+
 ##################
 #     4 FPKM     #
 ##################
@@ -61,6 +63,8 @@ for (x in 1:length(unique((isoforms.AS$gene_id)))) {
   pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS$gene_id))), style = 3)        
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
+
+rm(isoforms.AS, x, temp, pb)
 
 ######################
 #     FOLD CHANGE    #
@@ -93,16 +97,54 @@ for (x in 1:length(unique((isoforms.AS.FPKM$gene_id)))) {
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
 
+rm(isoforms.AS.FPKM, x, temp, pb)
+
+########################
+#     DEVREG GENES     #
+########################
+
+# kicseréljük az NaN-eket 1-ra, ez nem zavarja meg az analízist mert ezek a mezők azt jelentik hogy nincs fold change és a 1 az kisebb mint 4
+for (x in 1:length(isoforms.AS.FPKM.FC$gene_VMtoP_FC)) {
+  if (isoforms.AS.FPKM.FC$gene_VMtoP_FC[x] == "NaN") {
+    isoforms.AS.FPKM.FC$gene_VMtoP_FC[x] <- 1
+  }
+}
+
+# kicseréljük az NaN-eket 1-ra, ez nem zavarja meg az analízist mert ezek a mezők azt jelentik hogy nincs fold change és a 1 az kisebb mint 4
+for (x in 1:length(isoforms.AS.FPKM.FC$gene_PtoFB_FC)) {
+  if (isoforms.AS.FPKM.FC$gene_PtoFB_FC[x] == "NaN") {
+    isoforms.AS.FPKM.FC$gene_PtoFB_FC[x] <- 1
+  }
+}
+
+isoforms.AS.FPKM.FC.DEVREG <- as_tibble()
+
+for (x in 1:length(unique((isoforms.AS.FPKM.FC$gene_id)))) {
+  temp <- isoforms.AS.FPKM.FC[isoforms.AS.FPKM.FC$gene_id %in% unique((isoforms.AS.FPKM.FC$gene_id))[733],]
+  if (temp$gene_4FPKM == T & temp$gene_VMtoP_FC >= 4) {
+    temp$gene_DEVREG_type1 <- T
+  } else {
+    temp$gene_DEVREG_type1 <- F
+  }
+  if (temp$gene_4FPKM == T & temp$gene_PtoFB_FC >= 4) {
+    temp$gene_DEVREG_type2 <- T
+  } else {
+    temp$gene_DEVREG_type2 <- F
+  }
+  isoforms.AS.FPKM.FC.DEVREG <- rbind(isoforms.AS.FPKM.FC.DEVREG, temp)
+  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS.FPKM$gene_id))), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+  
 ###############################
 #     ISOFORM SIGNIFICANCY    #
 ###############################
 
+isoforms.AS.FPKM.FC.DEVREG.Sign <- as_tibble()
 
-isoforms.AS.FPKM.FC.Sign <- as_tibble()
-
-for (y in 1:length(unique((isoforms.AS.FPKM.FC$gene_id)))) {
+for (y in 1:length(unique((isoforms.AS.FPKM.FC.DEVREG$gene_id)))) {
   # kiszedjük az aktuális gene_id-hoz tartozó részt
-  temp <- isoforms.AS.FPKM.FC[isoforms.AS.FPKM.FC$gene_id %in% unique((isoforms.AS.FPKM.FC$gene_id))[y],]
+  temp <- isoforms.AS.FPKM.FC.DEVREG[isoforms.AS.FPKM.FC.DEVREG$gene_id %in% unique((isoforms.AS.FPKM.FC.DEVREG$gene_id))[y],]
   # megvizsgáljuk benne egymás után a sorokat
   for (x in 1:length(temp$gene_id)) {
     temp$isoform_Sign_VM[x] <- temp$VM_FPKM[x] >= (sum(temp$VM_FPKM) / temp$N_isoforms[1])
@@ -126,10 +168,19 @@ for (y in 1:length(unique((isoforms.AS.FPKM.FC$gene_id)))) {
   }
   temp <- temp %>%
     arrange(desc(isoform_maxSign))
-  isoforms.AS.FPKM.FC.Sign <- rbind(isoforms.AS.FPKM.FC.Sign, temp)
+  isoforms.AS.FPKM.FC.DEVREG.Sign <- rbind(isoforms.AS.FPKM.FC.DEVREG.Sign, temp)
   pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS.FPKM.FC$gene_id))), style = 3)        
   setTxtProgressBar(pb, y, title = NULL, label = NULL) 
 }
+
+
+
+
+
+
+
+
+
 
 
 
