@@ -17,6 +17,9 @@ Táblázat leírása:
 - __gene_id__ : mivel a táblázata alapvetően izoformák adatait tartalmazza ezért az első oszlop annak a génnek az ID-ja amiből leszármazik az aktuális izoforma
 - __transcript_id__ : az aktuális izoforma ID-ja amihez az adatok tartoznak
 - __VM_FPKM__ __(RMA_FPKM)__ __->__ __FB_FPKM__ : az izoforma FPKM értékei a különböző fejlődési fázisokban
+- __N_isoforms__ : megadja hogy az anyagénnek összesen hány izoformája van az aktuális izoformával együtt
+- __gene_4FPKM__ : megadja hogy az anyagén valamelyik fejlődési fázisban eléri-e a legalább 4FPKM értéket
+
 
 
 
