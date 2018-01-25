@@ -61,8 +61,36 @@ for (x in 1:length(unique((isoforms.AS$gene_id)))) {
   pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS$gene_id))), style = 3)        
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
-  
 
+
+
+
+isoforms.AS.FPKM.FC <- as_tibble()
+
+for (x in 1:length(unique((isoforms.AS.FPKM$gene_id)))) {
+  temp <- isoforms.AS.FPKM[isoforms.AS.FPKM$gene_id %in% unique((isoforms.AS.FPKM$gene_id))[x],]
+  temp$gene_VMtoP_FC <- sum(temp$P1_FPKM) / sum(temp$VM_FPKM)
+  min_P_FB <- min(sum(temp$P1_FPKM), 
+                  sum(temp$P2_C_FPKM),
+                  sum(temp$P2_S_FPKM),
+                  sum(temp$YFB_C_FPKM),
+                  sum(temp$YFB_S_FPKM),
+                  sum(temp$FB_C_FPKM),
+                  sum(temp$FB_L_FPKM),
+                  sum(temp$FB_S_FPKM))
+  max_P_FB <- max(sum(temp$P1_FPKM), 
+                  sum(temp$P2_C_FPKM),
+                  sum(temp$P2_S_FPKM),
+                  sum(temp$YFB_C_FPKM),
+                  sum(temp$YFB_S_FPKM),
+                  sum(temp$FB_C_FPKM),
+                  sum(temp$FB_L_FPKM),
+                  sum(temp$FB_S_FPKM))
+  temp$gene_PtoFB_FC <- max_P_FB / min_P_FB    
+  isoforms.AS.FPKM.FC <- rbind(isoforms.AS.FPKM.FC, temp)
+  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS.FPKM$gene_id))), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
 
 
 

@@ -17,9 +17,10 @@ Táblázat leírása:
 - __gene_id__ : mivel a táblázata alapvetően izoformák adatait tartalmazza ezért az első oszlop annak a génnek az ID-ja amiből leszármazik az aktuális izoforma
 - __transcript_id__ : az aktuális izoforma ID-ja amihez az adatok tartoznak
 - __VM_FPKM__ __(RMA_FPKM)__ __->__ __FB_FPKM__ : az izoforma FPKM értékei a különböző fejlődési fázisokban
-- __N_isoforms__ : megadja hogy az anyagénnek összesen hány izoformája van az aktuális izoformával együtt
-- __gene_4FPKM__ : megadja hogy az anyagén valamelyik fejlődési fázisban eléri-e a legalább 4FPKM értéket
-
+- __N_isoforms__ : megadja, hogy az anyagénnek összesen hány izoformája van az aktuális izoformával együtt
+- __gene_4FPKM__ : megadja, hogy az anyagén valamelyik fejlődési fázisban eléri-e a legalább 4FPKM értéket
+- __gene_VMtoP_FC__ : megadja, hogy az anyagén mekkora fold change-el rendelkezik a VM-P átmentetben (a 4x fold changehez itt az kell hogy az érték 4 felett legyen)
+- __gene_PtoFB_FC__ : megadja, hogy az anyagén mekkora fold change-el rendelkezik P-től FB-ig (ehhez vesszük a P-FB közötti fejlődési fázisok maximumát és minimumát és azok alapján határozzuk meg hogy mekkora a fold change a két legtávolabbi érték között)
 
 
 
