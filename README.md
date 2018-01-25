@@ -14,9 +14,9 @@
 
 Az adatokat amik szükségesek egy táblázatba gyűjtjük bele, a kiindulási táblázat a CUFFDIFF outputjaiban lévő isoforms.fpkm táblázat amit egy R script segítségével számolunk tovább.
 Táblázat leírása:
-- gene_id : mivel a táblázata alapvetően izoformák adatait tartalmazza ezért az első oszlop annak a génnek az ID-ja amiből leszármazik az aktuális izoforma
-- transcript_id : az aktuális izoforma ID-ja amihez az adatok tartoznak
-- VM_FPKM (RMA_FPKM) -> FB_FPKM : az izoforma FPKM értékei a különböző fejlődési fázisokban
- 
+- __gene_id__ : mivel a táblázata alapvetően izoformák adatait tartalmazza ezért az első oszlop annak a génnek az ID-ja amiből leszármazik az aktuális izoforma
+- __transcript_id__ : az aktuális izoforma ID-ja amihez az adatok tartoznak
+- __VM_FPKM__ __(RMA_FPKM)__ __->__ __FB_FPKM__ : az izoforma FPKM értékei a különböző fejlődési fázisokban
+
 
 
