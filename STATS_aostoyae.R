@@ -6,21 +6,19 @@ library(stringr)
 setwd("~/Desktop/alternative_splicing/aostoyae/")
 
 isoforms <- read_tsv("aostoyae_CUFFdiff/isoforms.fpkm_tracking")     # betöltjük az isoform FPKM táblát
-genes <- read_tsv("aostoyae_CUFFdiff/genes.fpkm_tracking")           # betöltjük az genes FPKM táblát
 
 isoforms <- isoforms %>%
   select(transcript_id = tracking_id, gene_id, RMA_FPKM, VM_FPKM, 
          P1_FPKM, P2_C_FPKM, P2_S_FPKM, YFB_C_FPKM, 
          YFB_S_FPKM, FB_C_FPKM, FB_L_FPKM, FB_S_FPKM)            # kiválasztjuk a minket érdeklő oszlopokat
 
-genes <- genes %>%
-  select(tracking_id, gene_id, RMA_FPKM, VM_FPKM, 
-         P1_FPKM, P2_C_FPKM, P2_S_FPKM, YFB_C_FPKM, 
-         YFB_S_FPKM, FB_C_FPKM, FB_L_FPKM, FB_S_FPKM)            # kiválasztjuk a minket érdeklő oszlopokat
+isoforms <- isoforms[,c(2,1,3:12)]
+isoforms <- isoforms %>%
+  arrange(gene_id, transcript_id)
 
-###################################################
-#     Alternaive Splicing gének és izoformáik     #
-###################################################
+###########################
+#     Isoform counter     #
+###########################
 
 alternative_splicing_associated_genes <- function(isoforms.fpkm_FUN) {
   geneids <- unique(isoforms.fpkm_FUN$gene_id)                                           # kimentjük az egyedi geneID-kat
@@ -37,6 +35,34 @@ alternative_splicing_associated_genes <- function(isoforms.fpkm_FUN) {
 }
 
 isoforms.AS <- alternative_splicing_associated_genes(isoforms)       # lefuttatjuk az AS szűrést
+
+##################
+#     4 FPKM     #
+##################
+
+isoforms.AS.FPKM <- as_tibble()
+
+for (x in 1:length(unique((isoforms.AS$gene_id)))) {
+  temp <- isoforms.AS[isoforms.AS$gene_id %in% unique((isoforms.AS$gene_id))[x],]
+  if (sum(temp$VM_FPKM) >= 4 | 
+      sum(temp$P1_FPKM) >= 4 | 
+      sum(temp$P2_C_FPKM) >= 4 | 
+      sum(temp$P2_S_FPKM) >= 4 | 
+      sum(temp$YFB_C_FPKM) >= 4 |
+      sum(temp$YFB_S_FPKM) >= 4 | 
+      sum(temp$FB_C_FPKM) >= 4 | 
+      sum(temp$FB_L_FPKM) >= 4 | 
+      sum(temp$FB_S_FPKM) >= 4) {
+    temp$gene_4FPKM <- T
+  } else {
+    temp$gene_4FPKM <- F
+  }
+  isoforms.AS.FPKM <- rbind(isoforms.AS.FPKM, temp)
+  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS$gene_id))), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+  
+
 
 
 
@@ -80,8 +106,7 @@ for (x in 1:length(isoforms.AS.R$transcript_id)) {
   setTxtProgressBar(pb, x, title = NULL, label = NULL)
 }
 
-isoforms.AS.R.arranged <- isoforms.AS.R %>%
-  arrange(gene_id, transcript_id)
+
 
 
 
