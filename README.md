@@ -21,6 +21,9 @@ Táblázat leírása:
 - __gene_4FPKM__ : megadja, hogy az anyagén valamelyik fejlődési fázisban eléri-e a legalább 4FPKM értéket
 - __gene_VMtoP_FC__ : megadja, hogy az anyagén mekkora fold change-el rendelkezik a VM-P átmentetben (a 4x fold changehez itt az kell hogy az érték 4 felett legyen)
 - __gene_PtoFB_FC__ : megadja, hogy az anyagén mekkora fold change-el rendelkezik P-től FB-ig (ehhez vesszük a P-FB közötti fejlődési fázisok maximumát és minimumát és azok alapján határozzuk meg hogy mekkora a fold change a két legtávolabbi érték között)
+- __isoform_Sign_VM__ -> __isoform_Sign_FB__ : megadja, hogy az adott isoforma szignifikáns-e az adott fázisban, ezt úgy számoljuk ki, hogy felállítunk egy thresholdot amit úgy kapunk meg hogy elosztjuk a gén teljes epresszióját, az izoformák számával így megkapjuk, hogyha egyenlő FPKM megoszlása lenne minden izoformának akkor mekkora FPKM értékkel kellene rendelkeznie, majd megnézzük hogy az egyes izoformák expressziós értéke meghaladja-e ezt a thresholdot, amennyiben igen TRUE-t kap, amennyiben nem FALSE-ot
+- __isoform_maxSign__ : összeadja hogy az egyes izoformák összesen hány fejlődési állapotban tekinthetőek szignifikánsnak a threshold alapján, ezután sorbaállítjuk ez alapján az adott gén izoformáit és az első lesz így a primary isoform
+
 
 
 
