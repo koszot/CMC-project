@@ -16,169 +16,102 @@ isoforms <- isoforms[,c(2,1,3:12)]
 isoforms <- isoforms %>%
   arrange(gene_id, transcript_id)
 
-###########################
-#     ISOFORM COUNTER     #
-###########################
+##### ISOFORM FPKM RANKING #####
 
-alternative_splicing_associated_genes <- function(isoforms.fpkm_FUN) {
-  geneids <- unique(isoforms.fpkm_FUN$gene_id)                                           # kimentjük az egyedi geneID-kat
-  isoforms.fpkm.AS <- data.frame()                                                       # megcsináljuk az üres data framet
-  for (x in 1:length(geneids)) {                                                         # egy ciklussal végigmegyünk az gén ID-ken
-    geneID <- geneids[x]                                                                 # kiszedjük az aktuális geneID-t
-    isoforms_temp <- isoforms.fpkm_FUN[isoforms.fpkm_FUN$gene_id %in% geneID,]           # aktuális geneID-hoz tartozó isoformák kiszedése
-    isoforms_temp$N_isoforms <- nrow(isoforms_temp)                                    # az adott génhez tartozó isoformák leszámolása
-    isoforms.fpkm.AS <- rbind(isoforms.fpkm.AS, isoforms_temp)       
-    pb <- txtProgressBar(min = 1, max = length(geneids), style = 3)                      # progress bar
-    setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+isoforms.rank <- as_tibble()
+
+for (x in 1:length(unique((isoforms$gene_id)))) {
+  temp <- isoforms[isoforms$gene_id %in% unique(isoforms$gene_id)[x],]
+  temp$RMA_FPKM_Rank <- match(temp$RMA_FPKM,sort(temp$RMA_FPKM, decreasing = T))
+  temp$VM_FPKM_Rank <- match(temp$VM_FPKM,sort(temp$VM_FPKM, decreasing = T))
+  temp$P1_FPKM_Rank <- match(temp$P1_FPKM,sort(temp$P1_FPKM, decreasing = T))
+  temp$P2_C_FPKM_Rank <- match(temp$P2_C_FPKM,sort(temp$P2_C_FPKM, decreasing = T))
+  temp$P2_S_FPKM_Rank <- match(temp$P2_S_FPKM,sort(temp$P2_S_FPKM, decreasing = T))
+  temp$YFB_C_FPKM_Rank <- match(temp$YFB_C_FPKM,sort(temp$YFB_C_FPKM, decreasing = T))
+  temp$YFB_S_FPKM_Rank <- match(temp$YFB_S_FPKM,sort(temp$YFB_S_FPKM, decreasing = T))
+  temp$FB_C_FPKM_Rank <- match(temp$FB_C_FPKM,sort(temp$FB_C_FPKM, decreasing = T))
+  temp$FB_L_FPKM_Rank <- match(temp$FB_L_FPKM,sort(temp$FB_L_FPKM, decreasing = T))
+  temp$FB_S_FPKM_Rank <- match(temp$FB_S_FPKM,sort(temp$FB_S_FPKM, decreasing = T))
+  for(y in 1:length(temp$gene_id)) {
+    temp$Rank_Sum[y] <- sum(temp$RMA_FPKM_Rank[y],
+                         temp$VM_FPKM_Rank[y],
+                         temp$P1_FPKM_Rank[y],
+                         temp$P2_C_FPKM_Rank[y],
+                         temp$P2_S_FPKM_Rank[y],
+                         temp$YFB_C_FPKM_Rank[y],
+                         temp$YFB_S_FPKM_Rank[y],
+                         temp$FB_C_FPKM_Rank[y],
+                         temp$FB_L_FPKM_Rank[y],
+                         temp$FB_S_FPKM_Rank[y])
+    temp$Overall_FPKM[y] <- sum(temp$RMA_FPKM[y],
+                            temp$VM_FPKM[y],
+                            temp$P1_FPKM[y],
+                            temp$P2_C_FPKM[y],
+                            temp$P2_S_FPKM[y],
+                            temp$YFB_C_FPKM[y],
+                            temp$YFB_S_FPKM[y],
+                            temp$FB_C_FPKM[y],
+                            temp$FB_L_FPKM[y],
+                            temp$FB_S_FPKM[y])
   }
-  return(isoforms.fpkm.AS)
-}
-
-isoforms.AS <- alternative_splicing_associated_genes(isoforms)       # lefuttatjuk az AS szűrést
-
-rm(isoforms)
-
-##################
-#     4 FPKM     #
-##################
-
-isoforms.AS.FPKM <- as_tibble()
-
-for (x in 1:length(unique((isoforms.AS$gene_id)))) {
-  temp <- isoforms.AS[isoforms.AS$gene_id %in% unique((isoforms.AS$gene_id))[x],]
-  if (sum(temp$VM_FPKM) >= 4 | 
-      sum(temp$P1_FPKM) >= 4 | 
-      sum(temp$P2_C_FPKM) >= 4 | 
-      sum(temp$P2_S_FPKM) >= 4 | 
-      sum(temp$YFB_C_FPKM) >= 4 |
-      sum(temp$YFB_S_FPKM) >= 4 | 
-      sum(temp$FB_C_FPKM) >= 4 | 
-      sum(temp$FB_L_FPKM) >= 4 | 
-      sum(temp$FB_S_FPKM) >= 4) {
-    temp$gene_4FPKM <- T
-  } else {
-    temp$gene_4FPKM <- F
-  }
-  isoforms.AS.FPKM <- rbind(isoforms.AS.FPKM, temp)
-  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS$gene_id))), style = 3)        
+  temp <- arrange(temp, Rank_Sum, desc(Overall_FPKM))
+  isoforms.rank <- rbind(isoforms.rank, temp)
+  pb <- txtProgressBar(min = 1, max = length(unique((isoforms$gene_id))), style = 3)        
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
 
-rm(isoforms.AS, x, temp, pb)
+##### AS EVENTS #####
 
-######################
-#     FOLD CHANGE    #
-######################
+library(ASpli)
 
-isoforms.AS.FPKM.FC <- as_tibble()
+annotation <- read_tsv("~/Desktop/alternative_splicing/aostoyae/aostoyae_genome/aostoyae_AS_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
+  separate(attributes, c("transcriptID_label", "transcriptID",
+                         "geneID_label", "geneID"), sep = " ")
 
-for (x in 1:length(unique((isoforms.AS.FPKM$gene_id)))) {
-  temp <- isoforms.AS.FPKM[isoforms.AS.FPKM$gene_id %in% unique((isoforms.AS.FPKM$gene_id))[x],]
-  temp$gene_VMtoP_FC <- sum(temp$P1_FPKM) / sum(temp$VM_FPKM)
-  min_P_FB <- min(sum(temp$P1_FPKM), 
-                  sum(temp$P2_C_FPKM),
-                  sum(temp$P2_S_FPKM),
-                  sum(temp$YFB_C_FPKM),
-                  sum(temp$YFB_S_FPKM),
-                  sum(temp$FB_C_FPKM),
-                  sum(temp$FB_L_FPKM),
-                  sum(temp$FB_S_FPKM))
-  max_P_FB <- max(sum(temp$P1_FPKM), 
-                  sum(temp$P2_C_FPKM),
-                  sum(temp$P2_S_FPKM),
-                  sum(temp$YFB_C_FPKM),
-                  sum(temp$YFB_S_FPKM),
-                  sum(temp$FB_C_FPKM),
-                  sum(temp$FB_L_FPKM),
-                  sum(temp$FB_S_FPKM))
-  temp$gene_PtoFB_FC <- max_P_FB / min_P_FB    
-  isoforms.AS.FPKM.FC <- rbind(isoforms.AS.FPKM.FC, temp)
-  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS.FPKM$gene_id))), style = 3)        
+annotation$transcriptID <- annotation$transcriptID %>% 
+  str_replace("\"", "") %>%
+  str_replace("\";", "")              # transcriptID-k átalakítása
+
+setwd("~/Desktop/AS_project/")
+
+isoforms.rank.AS <- as_tibble()
+
+for (x in 1:length(unique((isoforms.rank$gene_id)))) {
+  temp <- isoforms.rank[isoforms.rank$gene_id %in% unique(isoforms.rank$gene_id)[x],]
+  if (nrow(temp) == 1) next
+  temp$ES_bins[1] <- 0
+  temp$IR_bins[1] <- 0
+  temp$ALT5SS_bins[1] <- 0
+  temp$ALT3SS_bins[1] <- 0
+  for (y in 2:length(temp$gene_id)) {
+    temp_annotation <- rbind(annotation[annotation$transcriptID %in% temp$transcript_id[1],], annotation[annotation$transcriptID %in% temp$transcript_id[y],])
+    temp_annotation$transcriptID <- temp_annotation$transcriptID %>% str_replace("^", "\"") %>% str_replace("$", "\";")
+    temp_annotation <- unite(temp_annotation , attributes, 9:12, sep = " ")
+    write.table(temp_annotation, file = "./temp_annotation.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
+    TxDb <- makeTxDbFromGFF(file="./temp_annotation.gtf", format="gtf")
+    features <- binGenome(TxDb)
+    AS_count <- read_lines("./ASpli_binFeatures.log")
+    AS_count <- as_tibble(AS_count[-c(1,2,3,4,5,6,7,8)]) %>%
+      separate(value, c("l1", "l2", "l3", "l4", "l5"), sep = "\t") %>%
+      dplyr::select(l2, l4) %>%
+      separate(l2, c("event", "count"), sep = "=") %>%
+      separate(l4, c("event2", "count2"), sep = "=") 
+    AS_count$count <- as.integer(AS_count$count)
+    AS_count$count2 <- as.integer(AS_count$count2)
+    AS_count[1,2] <- AS_count[1,2] + AS_count[7,4]
+    AS_count[2,2] <- AS_count[2,2] + AS_count[8,4]
+    AS_count[3,2] <- AS_count[3,2] + AS_count[9,4]
+    AS_count[4,2] <- AS_count[4,2] + AS_count[10,4]
+    AS_count <- AS_count[-(5:10),-(3:4)]
+    temp$ES_bins[y] <- AS_count[1,2]
+    temp$IR_bins[y] <- AS_count[2,2]
+    temp$ALT5SS_bins[y] <- AS_count[3,2]
+    temp$ALT3SS_bins[y] <- AS_count[4,2]
+  }
+  isoforms.rank.AS <- rbind(isoforms.rank.AS, temp)
+  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.rank$gene_id))), style = 3)        
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
-
-rm(isoforms.AS.FPKM, x, temp, pb)
-
-########################
-#     DEVREG GENES     #
-########################
-
-# kicseréljük az NaN-eket 1-ra, ez nem zavarja meg az analízist mert ezek a mezők azt jelentik hogy nincs fold change és a 1 az kisebb mint 4
-for (x in 1:length(isoforms.AS.FPKM.FC$gene_VMtoP_FC)) {
-  if (isoforms.AS.FPKM.FC$gene_VMtoP_FC[x] == "NaN") {
-    isoforms.AS.FPKM.FC$gene_VMtoP_FC[x] <- 1
-  }
-}
-
-# kicseréljük az NaN-eket 1-ra, ez nem zavarja meg az analízist mert ezek a mezők azt jelentik hogy nincs fold change és a 1 az kisebb mint 4
-for (x in 1:length(isoforms.AS.FPKM.FC$gene_PtoFB_FC)) {
-  if (isoforms.AS.FPKM.FC$gene_PtoFB_FC[x] == "NaN") {
-    isoforms.AS.FPKM.FC$gene_PtoFB_FC[x] <- 1
-  }
-}
-
-isoforms.AS.FPKM.FC.DEVREG <- as_tibble()
-
-for (x in 1:length(unique((isoforms.AS.FPKM.FC$gene_id)))) {
-  temp <- isoforms.AS.FPKM.FC[isoforms.AS.FPKM.FC$gene_id %in% unique((isoforms.AS.FPKM.FC$gene_id))[733],]
-  if (temp$gene_4FPKM == T & temp$gene_VMtoP_FC >= 4) {
-    temp$gene_DEVREG_type1 <- T
-  } else {
-    temp$gene_DEVREG_type1 <- F
-  }
-  if (temp$gene_4FPKM == T & temp$gene_PtoFB_FC >= 4) {
-    temp$gene_DEVREG_type2 <- T
-  } else {
-    temp$gene_DEVREG_type2 <- F
-  }
-  isoforms.AS.FPKM.FC.DEVREG <- rbind(isoforms.AS.FPKM.FC.DEVREG, temp)
-  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS.FPKM$gene_id))), style = 3)        
-  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
-}
-  
-###############################
-#     ISOFORM SIGNIFICANCY    #
-###############################
-
-isoforms.AS.FPKM.FC.DEVREG.Sign <- as_tibble()
-
-for (y in 1:length(unique((isoforms.AS.FPKM.FC.DEVREG$gene_id)))) {
-  # kiszedjük az aktuális gene_id-hoz tartozó részt
-  temp <- isoforms.AS.FPKM.FC.DEVREG[isoforms.AS.FPKM.FC.DEVREG$gene_id %in% unique((isoforms.AS.FPKM.FC.DEVREG$gene_id))[y],]
-  # megvizsgáljuk benne egymás után a sorokat
-  for (x in 1:length(temp$gene_id)) {
-    temp$isoform_Sign_VM[x] <- temp$VM_FPKM[x] >= (sum(temp$VM_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_P1[x] <- temp$P1_FPKM[x] >= (sum(temp$P1_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_P2_C[x] <- temp$P2_C_FPKM[x] >= (sum(temp$P2_C_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_P2_S[x] <- temp$P2_S_FPKM[x] >= (sum(temp$P2_S_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_YFB_C[x] <- temp$YFB_C_FPKM[x] >= (sum(temp$YFB_C_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_YFB_S[x] <- temp$YFB_S_FPKM[x] >= (sum(temp$YFB_S_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_FB_C[x] <- temp$FB_C_FPKM[x] >= (sum(temp$FB_C_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_FB_L[x] <- temp$FB_L_FPKM[x] >= (sum(temp$FB_L_FPKM) / temp$N_isoforms[1])
-    temp$isoform_Sign_FB_S[x] <- temp$FB_S_FPKM[x] >= (sum(temp$FB_S_FPKM) / temp$N_isoforms[1])
-    temp$isoform_maxSign[x] <- sum(temp$isoform_Sign_VM[x], 
-                                   temp$isoform_Sign_P1[x],
-                                   temp$isoform_Sign_P2_C[x],
-                                   temp$isoform_Sign_P2_S[x],
-                                   temp$isoform_Sign_YFB_C[x],
-                                   temp$isoform_Sign_YFB_S[x],
-                                   temp$isoform_Sign_FB_C[x],
-                                   temp$isoform_Sign_FB_L[x],
-                                   temp$isoform_Sign_FB_S[x])
-  }
-  temp <- temp %>%
-    arrange(desc(isoform_maxSign))
-  isoforms.AS.FPKM.FC.DEVREG.Sign <- rbind(isoforms.AS.FPKM.FC.DEVREG.Sign, temp)
-  pb <- txtProgressBar(min = 1, max = length(unique((isoforms.AS.FPKM.FC$gene_id))), style = 3)        
-  setTxtProgressBar(pb, y, title = NULL, label = NULL) 
-}
-
-
-
-
-
-
-
 
 
 
