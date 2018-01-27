@@ -6,12 +6,18 @@
 
 ### Input:
 - isoforms.fpkm_tracking
+  - CuffDiff output FPKM érték táblázat az izoformákra
 - genes.fpkm_tracking
+  - CuffDiff output FPKM érték táblázat az génekre
 - aostoyae_AS_annotation.gtf
+  - a végső annotációs fájl amivel a CuffDiff analízis is futott
 
 ### Output:
 - aostoyae_isoforms.tsv
-  - Tartalmazza
+  - 
 - aostoyae_genes.tsv
 - aostoyae_corrected_annotation.gtf
+
+### Script:
+- STATS_TABLE_aostoyae.R
 
