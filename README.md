@@ -14,7 +14,7 @@
 
 ### Output:
 - aostoyae_isoforms.tsv
-  - 
+  - __VM_FPKM_Rank__ -> __FB_S_FPKM_Rank__
 - aostoyae_genes.tsv
 - aostoyae_corrected_annotation.gtf
 
