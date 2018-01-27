@@ -30,9 +30,10 @@
       - DEVREG_YFB : YFB_S -> YFB_C
       - DEVREG_FB : FB_S -> FB_C -> FB_L
   - __FB-init__
-
-  
+    - legalább 4 FPKM értékkel rendelkezik VM - P között valamelyik fejlődési fázisban/szövettípusban
+    - legalább 4x pozitív Fold Change-el rendelkezik VM - P átmenetben
 - __aostoyae_corrected_annotation.gtf__
+  - újrarendezzük az annotációs fájl sorait az izoforma dominancia alapján, hogy a primary transcript legyen elől, az ASpli ezután a primary transcripthez viszonyítva adja meg az alternative splicing eseményeket
 
 ### Script:
 - STATS_TABLE_aostoyae.R
