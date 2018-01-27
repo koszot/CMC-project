@@ -4,12 +4,12 @@
 
 ## Táblázat elkészítése
 
-Input:
+### Input:
 - isoforms.fpkm_tracking
 - genes.fpkm_tracking
 - aostoyae_AS_annotation.gtf
 
-Output:
+### Output:
 - aostoyae_isoforms.tsv
   - Tartalmazza
 - aostoyae_genes.tsv
