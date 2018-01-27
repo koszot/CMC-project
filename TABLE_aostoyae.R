@@ -169,6 +169,18 @@ for (x in 1:length(genes$gene_id)) {
 
 genes <- genes[,c(1:11,13)]
 
+##### GENES - isoforms #####
+
+genes.AS <- as_tibble()
+
+for (x in 1:length(genes$gene_id)) {
+  temp <- genes[genes$gene_id %in% genes$gene_id[x],]
+  temp$isoforms <- nrow(isoforms.rank[isoforms.rank$gene_id %in% genes$gene_id[x],])
+  genes.AS <- rbind(genes.AS, temp)
+  pb <- txtProgressBar(min = 1, max = length(genes$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
 ##### ISOFORM - FPKM RANKING #####
 
 isoforms.rank <- as_tibble()
@@ -221,20 +233,20 @@ for (x in 1:length(isoforms.rank$transcript_id)) {
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
 
+sum(unique(annotation.corrected$transcriptID) != isoforms.rank$transcript_id)
+
 ##### WRITE FILES #####
 
 write_tsv(isoforms.rank, "aostoyae_isoforms.tsv")
 
-write_tsv(genes, "aostoyae_genes.tsv")
+write_tsv(genes.AS, "aostoyae_genes.tsv")
 
-annotation$transcriptID <- annotation$transcriptID %>% 
-  str_replace("\"", "") %>%
-  str_replace("\";", "")              # transcriptID-k átalakítása
+annotation.corrected$transcriptID <- annotation.corrected$transcriptID %>% 
+  str_replace("^", "\"") %>%
+  str_replace("$", "\";")              # transcriptID-k átalakítása
 
-merged <- unite(annotation, attributes, 9:12, sep = " ")
+merged <- unite(annotation.corrected, attributes, 9:12, sep = " ")
 
-write_tsv(merged, "aostoyae_corrected_annotation.gtf", col_names = F)
-
-
+write.table(merged, file = "aostoyae_corrected_annotation.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 
 
