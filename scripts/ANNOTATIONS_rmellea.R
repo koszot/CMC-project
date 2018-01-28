@@ -5,35 +5,17 @@ library(stringr)
 
 ##### LOAD FILES #####
 
-setwd("~/Desktop/MTA_CMC_project/scommune/")
+setwd("~/Desktop/MTA_CMC_project/rmellea/")
 
-genes <- read_tsv("scommune_genes.tsv", col_names = T, cols(.default = col_guess(), gene_id = col_character()))
-isoforms <- read_tsv("scommune_isoforms.tsv", col_names = T, cols(.default = col_guess(), gene_id = col_character()))
+genes <- read_tsv("rmellea_genes.tsv", col_names = T, cols(.default = col_guess(), gene_id = col_character()))
+isoforms <- read_tsv("rmellea_isoforms.tsv", col_names = T, cols(.default = col_guess(), gene_id = col_character()))
 stats <- as_tibble()
 
-annotation <- read_tsv("scommune_corrected_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
+annotation <- read_tsv("rmellea_corrected_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
   separate(attributes, c("transcriptID_label", "transcriptID", "geneID_label", "geneID"), sep = " ")
 annotation$geneID <- annotation$geneID %>% 
   str_replace("\"", "") %>%
   str_replace("\";", "")              # transcriptID-k átalakítása
-
-##### BASIC STATISTICS #####
-
-stats[1,1] <- "genes"
-stats[1,2] <- nrow(genes)
-stats[2,1] <- "FB-devreg genes"
-stats[2,2] <- nrow(genes %>% filter(`FB-devreg` == T))
-stats[3,1] <- "FB-init genes"
-stats[3,2] <- nrow(genes %>% filter(`FB-init` == T))
-stats[4,1] <- "genes with AS"
-stats[4,2] <- nrow(genes %>% filter(isoforms > 1))
-stats[5,1] <- "FB-devreg genes with AS"
-stats[5,2] <- nrow(genes %>% filter(isoforms > 1) %>% filter(`FB-devreg` == T))
-stats[6,1] <- "FB-init genes with AS"
-stats[6,2] <- nrow(genes %>% filter(isoforms > 1) %>% filter(`FB-init` == T))
-
-colnames(stats) <- c("names", "scommune")
-write_tsv(stats, "scommune_stats.tsv")
 
 ##### AS ANNOTATION #####
 
@@ -51,7 +33,7 @@ annotation.as$geneID <- annotation.as$geneID %>%
   str_replace("^", "\"") %>%
   str_replace("$", "\";")              # transcriptID-k átalakítása
 merged <- unite(annotation.as, attributes, 9:12, sep = " ")
-write.table(merged, file = "scommune_AS_genes.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
+write.table(merged, file = "rmellea_AS_genes.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 
 ##### FB-DEVREG ANNOTATION #####
 
@@ -69,7 +51,7 @@ annotation.fb.devreg$geneID <- annotation.fb.devreg$geneID %>%
   str_replace("^", "\"") %>%
   str_replace("$", "\";")              # transcriptID-k átalakítása
 merged <- unite(annotation.fb.devreg, attributes, 9:12, sep = " ")
-write.table(merged, file = "scommune_FB_DEVREG_genes.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
+write.table(merged, file = "rmellea_FB_DEVREG_genes.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 
 ##### FB-INIT ANNOTATION #####
 
@@ -87,4 +69,4 @@ annotation.fb.init$geneID <- annotation.fb.init$geneID %>%
   str_replace("^", "\"") %>%
   str_replace("$", "\";")              # transcriptID-k átalakítása
 merged <- unite(annotation.fb.init, attributes, 9:12, sep = " ")
-write.table(merged, file = "scommune_FB_INIT_genes.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
+write.table(merged, file = "rmellea_FB_INIT_genes.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")

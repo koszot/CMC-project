@@ -42,7 +42,7 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_aostoyae.R
+- ANNOTATIONS_aostoyae.R
 
 ### Input:
 - __aostoyae_genes.tsv__
@@ -50,8 +50,6 @@
 - __aostoyae_corrected_annotation.gtf__
 
 ### Output:
-- __aostoyae_stats.tsv__
-  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
 - __aostoyae_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
 - __aostoyae_FB_DEVREG_genes.gtf__
@@ -62,25 +60,26 @@
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_aostoyae.R
+- STATISTICS_aostoyae.R
 
 ### Input:
-- __aostoyae_stats.tsv__
 - __aostoyae_AS_genes.gtf__
 - __aostoyae_FB_DEVREG_genes.gtf__
 - __aostoyae_FB_INIT_genes.gtf__
 
 ### Output:
 - __aostoyae_stats.tsv__
-  - __genes__ : összes annotált gén
-  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+  - __All__ __Genes__ : összes annotált gén
+  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
 
 # Coprinopsis cinerea
 
@@ -123,7 +122,7 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_ccinerea.R
+- ANNOTATIONS_ccinerea.R
 
 ### Input:
 - __ccinerea_genes.tsv__
@@ -131,8 +130,6 @@
 - __ccinerea_corrected_annotation.gtf__
 
 ### Output:
-- __ccinerea_stats.tsv__
-  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
 - __ccinerea_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
 - __ccinerea_FB_DEVREG_genes.gtf__
@@ -143,25 +140,26 @@
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_ccinerea.R
+- STATISTICS_ccinerea.R
 
 ### Input:
-- __ccinerea_stats.tsv__
 - __ccinerea_AS_genes.gtf__
 - __ccinerea_FB_DEVREG_genes.gtf__
 - __ccinerea_FB_INIT_genes.gtf__
 
 ### Output:
 - __ccinerea_stats.tsv__
-  - __genes__ : összes annotált gén
-  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+  - __All__ __Genes__ : összes annotált gén
+  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
 
 # Lentinus tigrinus
 
@@ -205,7 +203,7 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_ltigrinus.R
+- ANNOTATIONS_ltigrinus.R
 
 ### Input:
 - __ltigrinus_genes.tsv__
@@ -213,8 +211,6 @@
 - __ltigrinus_corrected_annotation.gtf__
 
 ### Output:
-- __ltigrinus_stats.tsv__
-  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
 - __ltigrinus_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
 - __ltigrinus_FB_DEVREG_genes.gtf__
@@ -225,25 +221,26 @@
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_ltigrinus.R
+- STATISTICS_ltigrinus.R
 
 ### Input:
-- __ltigrinus_stats.tsv__
 - __ltigrinus_AS_genes.gtf__
 - __ltigrinus_FB_DEVREG_genes.gtf__
 - __ltigrinus_FB_INIT_genes.gtf__
 
 ### Output:
 - __ltigrinus_stats.tsv__
-  - __genes__ : összes annotált gén
-  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+  - __All__ __Genes__ : összes annotált gén
+  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
 
 # Rickenella mellea
 
@@ -284,7 +281,7 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_rmellea.R
+- ANNOTATIONS_rmellea.R
 
 ### Input:
 - __rmellea_genes.tsv__
@@ -292,8 +289,6 @@
 - __rmellea_corrected_annotation.gtf__
 
 ### Output:
-- __rmellea_stats.tsv__
-  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
 - __rmellea_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
 - __rmellea_FB_DEVREG_genes.gtf__
@@ -304,25 +299,26 @@
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_rmellea.R
+- STATISTICS_rmellea.R
 
 ### Input:
-- __rmellea_stats.tsv__
 - __rmellea_AS_genes.gtf__
 - __rmellea_FB_DEVREG_genes.gtf__
 - __rmellea_FB_INIT_genes.gtf__
 
 ### Output:
 - __rmellea_stats.tsv__
-  - __genes__ : összes annotált gén
-  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+  - __All__ __Genes__ : összes annotált gén
+  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
 
 # Schizophyllum commune
 
@@ -361,7 +357,7 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_scommune.R
+- ANNOTATIONS_scommune.R
 
 ### Input:
 - __scommune_genes.tsv__
@@ -369,8 +365,6 @@
 - __scommune_corrected_annotation.gtf__
 
 ### Output:
-- __scommune_stats.tsv__
-  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
 - __scommune_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
 - __scommune_FB_DEVREG_genes.gtf__
@@ -381,25 +375,26 @@
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_scommune.R
+- STATISTICS_scommune.R
 
 ### Input:
-- __scommune_stats.tsv__
 - __scommune_AS_genes.gtf__
 - __scommune_FB_DEVREG_genes.gtf__
 - __scommune_FB_INIT_genes.gtf__
 
 ### Output:
 - __scommune_stats.tsv__
-  - __genes__ : összes annotált gén
-  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+  - __All__ __Genes__ : összes annotált gén
+  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
   
 # Phanerochaete chrysosporium
 
@@ -438,7 +433,7 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_pchrysosporium.R
+- ANNOTATIONS_pchrysosporium.R
 
 ### Input:
 - __pchrysosporium_genes.tsv__
@@ -446,8 +441,6 @@
 - __pchrysosporium_corrected_annotation.gtf__
 
 ### Output:
-- __pchrysosporium_stats.tsv__
-  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
 - __pchrysosporium_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
 - __pchrysosporium_FB_DEVREG_genes.gtf__
@@ -458,22 +451,23 @@
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_pchrysosporium.R
+- STATISTICS_pchrysosporium.R
 
 ### Input:
-- __pchrysosporium_stats.tsv__
 - __pchrysosporium_AS_genes.gtf__
 - __pchrysosporium_FB_DEVREG_genes.gtf__
 - __pchrysosporium_FB_INIT_genes.gtf__
 
 ### Output:
 - __pchrysosporium_stats.tsv__
-  - __genes__ : összes annotált gén
-  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+  - __All__ __Genes__ : összes annotált gén
+  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
