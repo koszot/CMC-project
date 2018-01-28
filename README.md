@@ -162,3 +162,85 @@
   - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
   - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
   - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+
+# Lentinus tigrinus
+
+## Táblázat elkészítése
+
+### Script:
+- TABLE_ltigrinus.R
+
+### Input:
+- __isoforms.fpkm_tracking__
+  - CuffDiff output FPKM érték táblázat az izoformákra
+- __genes.fpkm_tracking__
+  - CuffDiff output FPKM érték táblázat az génekre
+- __ltigrinus_AS_annotation.gtf__
+  - a végső annotációs fájl amivel a CuffDiff analízis is futott
+
+### Output:
+- __ltigrinus_isoforms.tsv__
+  - __VM_FPKM_Rank__ -> __FB_T_FPKM_Rank__ __oszlopok__: megadja, hogy az adott izoforma expressziós értéke hanyadik helyre van sorolva az összes izoforma expressziós értéke közül az adott fejlődési fázisban/szövettípusban, megmutatja hogy az adott izoforma mennyire domináns az adott fejlődési fázisban/szövettípusban
+  - __Rank_Sum__ __oszlop__: az izoformák dominancia értékei/rank-jei összeadva az összes fejlődési fázisban/szövettípusban
+  - __Overall_FPKM__ __oszlok__: az izoformák teljes expressziós értéke az összes fejlődési fázisban/szövettípusban
+  - __isoforms__ : a gén izoformáinak mennyisége
+  - __isoform__ __switch__ : a rank-ok különböző fejlődési fázisok/szövettípusok közötti váltakozása miatt, megfigyelhető hogy egyes izoformák dominánsak-e egy fázisban majd a dominanciájukat elveszítik-e egy másikban
+  - __primary__ __transcript__ : azt a transzkriptet nevezzük primary transzkriptnek amelyik összeadott dominancia értéke (Rank_Sum) a legkisebb, vagyis a legdominánsabb az izoformák közül, amennyiben ezt az értéket több izoforma is felveszi, az izoforma összeexpressziójának értéke (Overall_FPKM) alapján döntünk, vagyis az lesz a primary transcript amelyiknek a legnagyobb az expressziós értéke az azonos rank-ú izoformák közül
+- __ltigrinus_genes.tsv__
+  - __FB-devreg__
+    - legalább 4 FPKM értékkel rendelkezik P1 - FB között valamelyik fejlődési fázisban/szövettípusban
+    - legalább 4x Fold Change-el rendelkezik valamelyik fejlődési útvonalon
+      - DEVREG_T : VM -> P1 -> P2_T -> YFB_T -> FB_T
+      - DEVREG_K : VM -> P1 -> P2_K -> YFB_K -> FB_K
+      - DEVREG_L : VM -> P1 -> P2_K -> YFB_K -> FB_L
+      - DEVREG_P2 : P2_T -> P2_K
+      - DEVREG_YFB : YFB_T -> YFB_K
+      - DEVREG_FB : FB_T -> FB_K -> FB_L
+  - __FB-init__
+    - legalább 4 FPKM értékkel rendelkezik VM - P1 között valamelyik fejlődési fázisban/szövettípusban
+    - legalább 4x pozitív Fold Change-el rendelkezik VM - P1 átmenetben
+- __ltigrinus_corrected_annotation.gtf__
+  - újrarendezzük az annotációs fájl sorait az izoforma dominancia alapján, hogy a primary transcript legyen elől, az ASpli ezután a primary transcripthez viszonyítva adja meg az alternative splicing eseményeket
+
+## Statisztikák kinyerése
+
+### Script:
+- STATS_ltigrinus.R
+
+### Input:
+- __ltigrinus_genes.tsv__
+- __ltigrinus_isoforms.tsv__
+- __ltigrinus_corrected_annotation.gtf__
+
+### Output:
+- __ltigrinus_stats.tsv__
+  - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
+- __ltigrinus_AS_genes.gtf__
+  - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
+- __ltigrinus_FB_DEVREG_genes.gtf__
+  - alternative splicingban résztvevő FB-devreg géneket tartalmazó annotációs fájl az ASpli számára
+- __ltigrinus_FB_INIT_genes.gtf__
+  - alternative splicingban résztvevő FB-init géneket tartalmazó annotációs fájl az ASpli számára
+
+## Alternative Splicing statisztikák kinyerése
+
+### Script:
+- AS_ltigrinus.R
+
+### Input:
+- __ltigrinus_stats.tsv__
+- __ltigrinus_AS_genes.gtf__
+- __ltigrinus_FB_DEVREG_genes.gtf__
+- __ltigrinus_FB_INIT_genes.gtf__
+
+### Output:
+- __ltigrinus_stats.tsv__
+  - __genes__ : összes annotált gén
+  - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __genes__ __with__ __AS__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
+  - __FB-devreg__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
+  - __FB-init__ __genes__ __with__ __AS__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
+  - __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
+  - __FB-devreg__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
+  - __FB-init__ __genes__ __with__ __AS__ __ES/IR/ALT5SS/ALT3SS__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
