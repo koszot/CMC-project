@@ -123,36 +123,36 @@
 ## Statisztikák kinyerése
 
 ### Script:
-- STATS_aostoyae.R
+- STATS_ccinerea.R
 
 ### Input:
-- __aostoyae_genes.tsv__
-- __aostoyae_isoforms.tsv__
-- __aostoyae_corrected_annotation.gtf__
+- __ccinerea_genes.tsv__
+- __ccinerea_isoforms.tsv__
+- __ccinerea_corrected_annotation.gtf__
 
 ### Output:
-- __aostoyae_stats.tsv__
+- __ccinerea_stats.tsv__
   - a statisztikai adatokat tartalmazó fájl, részletezése az utolsó lépésnél
-- __aostoyae_AS_genes.gtf__
+- __ccinerea_AS_genes.gtf__
   - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
-- __aostoyae_FB_DEVREG_genes.gtf__
+- __ccinerea_FB_DEVREG_genes.gtf__
   - alternative splicingban résztvevő FB-devreg géneket tartalmazó annotációs fájl az ASpli számára
-- __aostoyae_FB_INIT_genes.gtf__
+- __ccinerea_FB_INIT_genes.gtf__
   - alternative splicingban résztvevő FB-init géneket tartalmazó annotációs fájl az ASpli számára
 
 ## Alternative Splicing statisztikák kinyerése
 
 ### Script:
-- AS_aostoyae.R
+- AS_ccinerea.R
 
 ### Input:
-- __aostoyae_stats.tsv__
-- __aostoyae_AS_genes.gtf__
-- __aostoyae_FB_DEVREG_genes.gtf__
-- __aostoyae_FB_INIT_genes.gtf__
+- __ccinerea_stats.tsv__
+- __ccinerea_AS_genes.gtf__
+- __ccinerea_FB_DEVREG_genes.gtf__
+- __ccinerea_FB_INIT_genes.gtf__
 
 ### Output:
-- __aostoyae_stats.tsv__
+- __ccinerea_stats.tsv__
   - __genes__ : összes annotált gén
   - __FB-devreg__ __genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
   - __FB-init__ __genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
