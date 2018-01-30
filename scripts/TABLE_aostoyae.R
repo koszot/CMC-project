@@ -5,9 +5,9 @@ library(stringr)
 
 ##### LOAD FILES #####
 
-setwd("~/Desktop/MTA_CMC_project/aostoyae/")
+setwd("~/Desktop/MTA/AS_project/FILES_aostoyae/")
 
-isoforms <- read_tsv("isoforms.fpkm_tracking")     # betöltjük az isoform FPKM táblát
+isoforms <- read_tsv("EXPRESSION_aostoyae/isoforms.fpkm_tracking")     # betöltjük az isoform FPKM táblát
 isoforms <- isoforms %>%
   select(transcript_id = tracking_id, gene_id, VM_FPKM, 
          P1_FPKM, P2_C_FPKM, P2_S_FPKM, YFB_C_FPKM, 
@@ -16,13 +16,13 @@ isoforms <- isoforms[,c(2,1,3:11)]
 isoforms <- isoforms %>%
   arrange(gene_id, transcript_id)
 
-annotation <- read_tsv("aostoyae_AS_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
+annotation <- read_tsv("GENOME_aostoyae/aostoyae_AS_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
   separate(attributes, c("transcriptID_label", "transcriptID", "geneID_label", "geneID"), sep = " ")
 annotation$transcriptID <- annotation$transcriptID %>% 
   str_replace("\"", "") %>%
   str_replace("\";", "")              # transcriptID-k átalakítása
 
-genes <- read_tsv("genes.fpkm_tracking")     # betöltjük az isoform FPKM táblát
+genes <- read_tsv("EXPRESSION_aostoyae/genes.fpkm_tracking")     # betöltjük az isoform FPKM táblát
 genes <- genes %>%
   select(gene_id, VM_FPKM, 
          P1_FPKM, P2_C_FPKM, P2_S_FPKM, YFB_C_FPKM, 
@@ -169,14 +169,14 @@ for (x in 1:length(genes$gene_id)) {
 
 genes <- genes[,c(1:11,13)]
 
-##### GENES - isoforms #####
-
-genes.AS <- as_tibble()
+##### GENES - devreg-s-stricto #####
 
 for (x in 1:length(genes$gene_id)) {
-  temp <- genes[genes$gene_id %in% genes$gene_id[x],]
-  temp$isoforms <- nrow(isoforms.rank[isoforms.rank$gene_id %in% genes$gene_id[x],])
-  genes.AS <- rbind(genes.AS, temp)
+  if (genes$`FB-devreg`[x] == T | genes$`FB-init`[x] == T ) {
+    genes$"devreg-s-stricto"[x] <- T
+  } else {
+    genes$"devreg-s-stricto"[x] <- F
+  }
   pb <- txtProgressBar(min = 1, max = length(genes$gene_id), style = 3)        
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
@@ -198,29 +198,56 @@ for (x in 1:length(unique((isoforms$gene_id)))) {
   temp$FB_S_FPKM_Rank <- match(temp$FB_S_FPKM,sort(temp$FB_S_FPKM, decreasing = T))
   for(y in 1:length(temp$gene_id)) {
     temp$Rank_Sum[y] <- sum(temp$VM_FPKM_Rank[y],
-                         temp$P1_FPKM_Rank[y],
-                         temp$P2_C_FPKM_Rank[y],
-                         temp$P2_S_FPKM_Rank[y],
-                         temp$YFB_C_FPKM_Rank[y],
-                         temp$YFB_S_FPKM_Rank[y],
-                         temp$FB_C_FPKM_Rank[y],
-                         temp$FB_L_FPKM_Rank[y],
-                         temp$FB_S_FPKM_Rank[y])
+                            temp$P1_FPKM_Rank[y],
+                            temp$P2_C_FPKM_Rank[y],
+                            temp$P2_S_FPKM_Rank[y],
+                            temp$YFB_C_FPKM_Rank[y],
+                            temp$YFB_S_FPKM_Rank[y],
+                            temp$FB_C_FPKM_Rank[y],
+                            temp$FB_L_FPKM_Rank[y],
+                            temp$FB_S_FPKM_Rank[y])
     temp$Overall_FPKM[y] <- sum(temp$VM_FPKM[y],
-                            temp$P1_FPKM[y],
-                            temp$P2_C_FPKM[y],
-                            temp$P2_S_FPKM[y],
-                            temp$YFB_C_FPKM[y],
-                            temp$YFB_S_FPKM[y],
-                            temp$FB_C_FPKM[y],
-                            temp$FB_L_FPKM[y],
-                            temp$FB_S_FPKM[y])
+                                temp$P1_FPKM[y],
+                                temp$P2_C_FPKM[y],
+                                temp$P2_S_FPKM[y],
+                                temp$YFB_C_FPKM[y],
+                                temp$YFB_S_FPKM[y],
+                                temp$FB_C_FPKM[y],
+                                temp$FB_L_FPKM[y],
+                                temp$FB_S_FPKM[y])
   }
   temp <- arrange(temp, Rank_Sum, desc(Overall_FPKM))
   isoforms.rank <- rbind(isoforms.rank, temp)
   pb <- txtProgressBar(min = 1, max = length(unique((isoforms$gene_id))), style = 3)        
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
+
+##### GENES - isoforms #####
+
+genes.AS <- as_tibble()
+
+for (x in 1:length(genes$gene_id)) {
+  temp <- genes[genes$gene_id %in% genes$gene_id[x],]
+  temp$isoforms <- nrow(isoforms.rank[isoforms.rank$gene_id %in% genes$gene_id[x],])
+  genes.AS <- rbind(genes.AS, temp)
+  pb <- txtProgressBar(min = 1, max = length(genes$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+##### Genes to Isoforms stats #####
+
+isoforms.rank.stats <- left_join(isoforms.rank, genes.AS[,c(1,11:14)])
+names(isoforms.rank.stats)[23:26] <- c("GENE-FB-devreg", "GENE-FB-init", "GENE-devreg-s-stricto", "GENE-isoforms")
+
+#####  #####
+
+
+
+
+
+
+
+
 
 ##### ANNOTATION CORRECTION #####
 
@@ -237,9 +264,9 @@ sum(unique(annotation.corrected$transcriptID) != isoforms.rank$transcript_id)
 
 ##### WRITE FILES #####
 
-write_tsv(isoforms.rank, "aostoyae_isoforms.tsv")
+write_tsv(isoforms.rank, "ccinerea_isoforms.tsv")
 
-write_tsv(genes.AS, "aostoyae_genes.tsv")
+write_tsv(genes.AS, "ccinerea_genes.tsv")
 
 annotation.corrected$transcriptID <- annotation.corrected$transcriptID %>% 
   str_replace("^", "\"") %>%
@@ -247,6 +274,5 @@ annotation.corrected$transcriptID <- annotation.corrected$transcriptID %>%
 
 merged <- unite(annotation.corrected, attributes, 9:12, sep = " ")
 
-write.table(merged, file = "aostoyae_corrected_annotation.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
-
+write.table(merged, file = "ccinerea_corrected_annotation.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 
