@@ -51,11 +51,24 @@
   - a gén legalább 4x pozitív Fold Change-el rendelkezik VM - P1 átmenetben
 - __GENE-devreg-s-stricto__ (boolean) : vagy a GENE-FB-devreg, vagy a GENE-FB-init TRUE-t vesz fel
 - __GENE-isoforms__ (integer) : a gén izoformáinak mennyisége
+- __ISOFORM-FB-devreg__ (boolean)
+  - az izoforma legalább 4 FPKM értékkel rendelkezik P1 - FB között valamelyik fejlődési fázisban/szövettípusban
+  - az izoforma legalább 4x Fold Change-el rendelkezik valamelyik fejlődési útvonalon
+    - DEVREG_S : P1 -> P2_S -> YFB_S -> FB_S
+    - DEVREG_C : P1 -> P2_C -> YFB_C -> FB_C
+    - DEVREG_L : P1 -> P2_C -> YFB_C -> FB_L
+    - DEVREG_P2 : P2_S -> P2_C
+    - DEVREG_YFB : YFB_S -> YFB_C
+    - DEVREG_FB : FB_S -> FB_C -> FB_L
+- __ISOFORM-FB-init__ (boolean)
+  - az izoforma legalább 4 FPKM értékkel rendelkezik VM - P1 között valamelyik fejlődési fázisban/szövettípusban
+  - az izoforma legalább 4x pozitív Fold Change-el rendelkezik VM - P1 átmenetben
+- __ISOFORM-devreg-s-stricto__ (boolean) : vagy az ISOFORM-FB-devreg, vagy az ISOFORM-FB-init TRUE-t vesz fel
 
 ### Output: aostoyae_corrected_annotation.gtf
 - újrarendezzük az annotációs fájl sorait az izoforma dominancia alapján, hogy a primary transcript legyen elől, az ASpli ezután a primary transcripthez viszonyítva adja meg az alternative splicing eseményeket
 
-## Statisztikák kinyerése
+## Annotációk elkészítése
 
 ### Script:
 - ANNOTATIONS_aostoyae.R
@@ -66,12 +79,9 @@
 - __aostoyae_corrected_annotation.gtf__
 
 ### Output:
-- __aostoyae_AS_genes.gtf__
-  - alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
-- __aostoyae_FB_DEVREG_genes.gtf__
-  - alternative splicingban résztvevő FB-devreg géneket tartalmazó annotációs fájl az ASpli számára
-- __aostoyae_FB_INIT_genes.gtf__
-  - alternative splicingban résztvevő FB-init géneket tartalmazó annotációs fájl az ASpli számára
+- __aostoyae_AS_genes.gtf__ : alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
+- __aostoyae_FB_DEVREG_genes.gtf__ : alternative splicingban résztvevő FB-devreg géneket tartalmazó annotációs fájl az ASpli számára
+- __aostoyae_FB_INIT_genes.gtf__ : alternative splicingban résztvevő FB-init géneket tartalmazó annotációs fájl az ASpli számára
 
 ## Alternative Splicing statisztikák kinyerése
 
@@ -84,18 +94,7 @@
 - __aostoyae_FB_INIT_genes.gtf__
 
 ### Output:
-- __aostoyae_stats.tsv__
-  - __All__ __Genes__ : összes annotált gén
-  - __FB-devreg__ __Genes__ : FB-devreg gének száma | FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __FB-init__ __Genes__ : FB-init gének száma | FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __AS__ __Genes__ : alternative splicingban résztvevő gének száma | alternative splicingban résztvevő gének százaléka az összes annotált génhez viszonyítva
-  - __AS__ __FB-devreg__ __Genes__ : alternative splicingban résztvevő FB-devreg gének száma | alternative splicingban résztvevő FB-devreg gének százaléka az összes annotált génhez viszonyítva
-  - __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-init gének száma | alternative splicingban résztvevő FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __FB-devreg__ __and__ __FB-init__ __Genes__ : FB-devreg és FB-init gének száma | FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __AS__ __FB-devreg__ __and__ __AS__ __FB-init__ __Genes__ : alternative splicingban résztvevő FB-devreg és FB-init gének száma | alternative splicingban résztvevő FB-devreg és FB-init gének százaléka az összes annotált génhez viszonyítva
-  - __AS__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő gének AS eseményeinek száma | alternative splicingban résztvevő gének AS eseményeinek százalékos aránya
-  - __AS__ __FB-devreg__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-devreg gének AS eseményeinek száma | alternative splicingban résztvevő FB-devreg gének AS eseményeinek százalékos aránya
-  - __AS__ __FB_init__ __Genes__ __--__ __ES__/__IR__/__Alt__ __5'__ __SS__/__Alt__ __3'__ __SS__ __bins__ : alternative splicingban résztvevő FB-init gének AS eseményeinek száma | alternative splicingban résztvevő FB-init gének AS eseményeinek százalékos aránya
+- __aostoyae_stats.tsv__ : statisztikai fájl, az Description rész leírja hogy minek a száma van megadva a második oszlopban a / jellel elválasztott részek a szintek pl. Alternatively Spliced / NOT FB-init / FB-init Isoforms azt jelenti, hogy alternatív splicingban részvevő nem FB-init de FB-init izoformákkal rendelkező gének számát adja meg a 2. oszlop, a --- jel után a különböző alternatív splicing események mennyisége van megadva
 
 # Coprinopsis cinerea
 
@@ -105,12 +104,108 @@
 - TABLE_ccinerea.R
 
 ### Input:
-- __isoforms.fpkm_tracking__
-  - CuffDiff output FPKM érték táblázat az izoformákra
-- __genes.fpkm_tracking__
-  - CuffDiff output FPKM érték táblázat az génekre
-- __ccinerea_AmutBmut_AS_annotation.gtf__
-  - a végső annotációs fájl amivel a CuffDiff analízis is futott
+- __isoforms.fpkm_tracking__ : CuffDiff output FPKM érték táblázat az izoformákra
+- __genes.fpkm_tracking__ : CuffDiff output FPKM érték táblázat az génekre
+- __ccinerea_AS_annotation.gtf__ : a végső annotációs fájl amivel a CuffDiff analízis is futott
+
+### Output: ccinerea_genes.tsv
+- __gene_id__ (character) : az adott gén azonosítója
+- __VM/H/P1/P2/YFB_K/YFB_L/YFB_T/FB_KL/FB_T_FPKM__ (integer) : az adott génhez tartozó expressziós érték minden fejlődési fázisban/szövettípusban
+- __FB-devreg__ (boolean)
+  - legalább 4 FPKM értékkel rendelkezik H - FB között valamelyik fejlődési fázisban/szövettípusban
+  - legalább 4x Fold Change-el rendelkezik valamelyik fejlődési útvonalon
+    - DEVREG_T : H -> P1 -> P2 -> YFB_T -> FB_T
+    - DEVREG_K : H -> P1 -> P2 -> YFB_K -> FB_KL
+    - DEVREG_L : H -> P1 -> P2 -> YFB_L -> FB_KL
+    - DEVREG_YFB : YFB_T -> YFB_K -> YFB_L
+    - DEVREG_FB : FB_T -> FB_KL
+- __FB-init__ (boolean)
+  - legalább 4 FPKM értékkel rendelkezik VM - P1 között valamelyik fejlődési fázisban/szövettípusban
+  - legalább 4x pozitív Fold Change-el rendelkezik VM - H+P1 átmenetben
+- __devreg-s-stricto__ (boolean) : vagy az FB-devreg, vagy az FB-init TRUE-t vesz fel
+- __isoforms__ (integer) : a gén izoformáinak mennyisége
+
+### Output: ccinerea_isoforms.tsv
+- __gene_id__ (character) : az adott gén azonosítója
+- __transcript_id__ (character) : az adott génhez tartozó izoformák azonosítója
+- __VM/H/P1/P2/YFB_K/YFB_L/YFB_T/FB_KL/FB_T_FPKM__ (integer) : az adott izoformához tartozó expressziós érték minden fejlődési fázisban/szövettípusban
+- __VM/H/P1/P2/YFB_K/YFB_L/YFB_T/FB_KL/FB_T_FPKM__Rank__ (integer) : megadja, hogy az adott izoforma expressziós értéke hanyadik helyre van sorolva az összes izoforma expressziós értéke közül az adott fejlődési fázisban/szövettípusban, megmutatja hogy az adott izoforma mennyire domináns az adott fejlődési fázisban/szövettípusban
+- __Rank_Sum__ (integer) : az izoformák dominancia értékei/rank-jei összeadva az összes fejlődési fázisban/szövettípusban
+- __Overall_FPKM__ (integer) : az izoformák összesített expressziós értéke az összes fejlődési fázisban/szövettípusban
+- __GENE-FB-devreg__ (boolean)
+  - a gén legalább 4 FPKM értékkel rendelkezik H - FB között valamelyik fejlődési fázisban/szövettípusban
+  - a gén legalább 4x Fold Change-el rendelkezik valamelyik fejlődési útvonalon
+    - DEVREG_T : H -> P1 -> P2 -> YFB_T -> FB_T
+    - DEVREG_K : H -> P1 -> P2 -> YFB_K -> FB_KL
+    - DEVREG_L : H -> P1 -> P2 -> YFB_L -> FB_KL
+    - DEVREG_YFB : YFB_T -> YFB_K -> YFB_L
+    - DEVREG_FB : FB_T -> FB_KL
+- __GENE-FB-init__ (boolean)
+  - a gén legalább 4 FPKM értékkel rendelkezik VM - P1 között valamelyik fejlődési fázisban/szövettípusban
+  - a gén legalább 4x pozitív Fold Change-el rendelkezik VM - H+P1 átmenetben
+- __GENE-devreg-s-stricto__ (boolean) : vagy a GENE-FB-devreg, vagy a GENE-FB-init TRUE-t vesz fel
+- __GENE-isoforms__ (integer) : a gén izoformáinak mennyisége
+- __ISOFORM-FB-devreg__ (boolean)
+  - az izoforma legalább 4 FPKM értékkel rendelkezik P1 - FB között valamelyik fejlődési fázisban/szövettípusban
+  - az izoforma legalább 4x Fold Change-el rendelkezik valamelyik fejlődési útvonalon
+    - DEVREG_T : H -> P1 -> P2 -> YFB_T -> FB_T
+    - DEVREG_K : H -> P1 -> P2 -> YFB_K -> FB_KL
+    - DEVREG_L : H -> P1 -> P2 -> YFB_L -> FB_KL
+    - DEVREG_YFB : YFB_T -> YFB_K -> YFB_L
+    - DEVREG_FB : FB_T -> FB_KL
+- __ISOFORM-FB-init__ (boolean)
+  - az izoforma legalább 4 FPKM értékkel rendelkezik VM - P1 között valamelyik fejlődési fázisban/szövettípusban
+  - az izoforma legalább 4x pozitív Fold Change-el rendelkezik VM - H+P1 átmenetben
+- __ISOFORM-devreg-s-stricto__ (boolean) : vagy az ISOFORM-FB-devreg, vagy az ISOFORM-FB-init TRUE-t vesz fel
+
+### Output: ccinerea_corrected_annotation.gtf
+- újrarendezzük az annotációs fájl sorait az izoforma dominancia alapján, hogy a primary transcript legyen elől, az ASpli ezután a primary transcripthez viszonyítva adja meg az alternative splicing eseményeket
+
+## Annotációk elkészítése
+
+### Script:
+- ANNOTATIONS_ccinerea.R
+
+### Input:
+- __ccinerea_genes.tsv__
+- __ccinerea_isoforms.tsv__
+- __ccinerea_corrected_annotation.gtf__
+
+### Output:
+- __ccinerea_AS_genes.gtf__ : alternative splicingban résztvevő géneket tartalmazó annotációs fájl az ASpli számára
+- __ccinerea_FB_DEVREG_genes.gtf__ : alternative splicingban résztvevő FB-devreg géneket tartalmazó annotációs fájl az ASpli számára
+- __ccinerea_FB_INIT_genes.gtf__ : alternative splicingban résztvevő FB-init géneket tartalmazó annotációs fájl az ASpli számára
+
+## Alternative Splicing statisztikák kinyerése
+
+### Script:
+- STATISTICS_ccinerea.R
+
+### Input:
+- __ccinerea_AS_genes.gtf__
+- __ccinerea_FB_DEVREG_genes.gtf__
+- __ccinerea_FB_INIT_genes.gtf__
+
+### Output:
+- __ccinerea_stats.tsv__ : statisztikai fájl, az Description rész leírja hogy minek a száma van megadva a második oszlopban a / jellel elválasztott részek a szintek pl. Alternatively Spliced / NOT FB-init / FB-init Isoforms azt jelenti, hogy alternatív splicingban részvevő nem FB-init de FB-init izoformákkal rendelkező gének számát adja meg a 2. oszlop, a --- jel után a különböző alternatív splicing események mennyisége van megadva
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Output:
 - __ccinerea_isoforms.tsv__
