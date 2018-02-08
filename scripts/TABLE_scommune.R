@@ -5,22 +5,22 @@ library(stringr)
 
 ##### LOAD FILES #####
 
-setwd("~/Desktop/MTA_CMC_project/scommune/")
+setwd("~/Desktop/MTA/AS_project/FILES_scommune/")
 
-isoforms <- read_tsv("isoforms.fpkm_tracking", col_names = T, cols(.default = col_guess(), tracking_id = col_character(), gene_id = col_character()))   
+isoforms <- read_tsv("EXPRESSION_scommune/isoforms.fpkm_tracking", col_names = T, cols(.default = col_guess(), tracking_id = col_character(), gene_id = col_character()))   
 isoforms <- isoforms %>%
   select(transcript_id = tracking_id, gene_id, VM_FPKM, P1_FPKM, P2_FPKM, YFB_FPKM, FB_FPKM)            # kiválasztjuk a minket érdeklő oszlopokat
 isoforms <- isoforms[,c(2,1,3:7)]
 isoforms <- isoforms %>%
   arrange(gene_id, transcript_id)
 
-annotation <- read_tsv("scommune_AS_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
+annotation <- read_tsv("GENOME_scommune/scommune_AS_annotation.gtf",  col_names = c("chr", "maker","type", "start", "end", "att1", "strand", "att2", "attributes")) %>%
   separate(attributes, c("transcriptID_label", "transcriptID", "geneID_label", "geneID"), sep = " ")
 annotation$transcriptID <- annotation$transcriptID %>% 
   str_replace("\"", "") %>%
   str_replace("\";", "")              # transcriptID-k átalakítása
 
-genes <- read_tsv("genes.fpkm_tracking", col_names = T, cols(.default = col_guess(), tracking_id = col_character(), gene_id = col_character()))     # betöltjük az isoform FPKM táblát
+genes <- read_tsv("EXPRESSION_scommune/genes.fpkm_tracking", col_names = T, cols(.default = col_guess(), tracking_id = col_character(), gene_id = col_character()))     # betöltjük az isoform FPKM táblát
 genes <- genes %>% select(gene_id, VM_FPKM, P1_FPKM, P2_FPKM, YFB_FPKM, FB_FPKM)            # kiválasztjuk a minket érdeklő oszlopokat
 
 ##### GENES - 4 FPKM P1-FB #####
@@ -89,6 +89,18 @@ for (x in 1:length(genes$gene_id)) {
 
 genes <- genes[,c(1:7,9)]
 
+##### GENES - devreg-s-stricto #####
+
+for (x in 1:length(genes$gene_id)) {
+  if (genes$`FB-devreg`[x] == T | genes$`FB-init`[x] == T ) {
+    genes$"devreg-s-stricto"[x] <- T
+  } else {
+    genes$"devreg-s-stricto"[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(genes$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
 ##### ISOFORM - FPKM RANKING #####
 
 isoforms.rank <- as_tibble()
@@ -130,6 +142,91 @@ for (x in 1:length(genes$gene_id)) {
   setTxtProgressBar(pb, x, title = NULL, label = NULL) 
 }
 
+##### Genes to Isoforms stats #####
+
+isoforms.rank.stats <- left_join(isoforms.rank, genes.AS[,c(1,7:10)])
+names(isoforms.rank.stats)[15:18] <- c("GENE-FB-devreg", "GENE-FB-init", "GENE-devreg-s-stricto", "GENE-isoforms")
+
+##### ISOFORM - 4 FPKM P1-FB #####
+
+for (x in 1:length(isoforms.rank.stats$gene_id)) {
+  if (max(isoforms.rank.stats[x,4:7]) >= 4) {
+    isoforms.rank.stats$">= 4 FPKM"[x] <- T
+  } else {
+    isoforms.rank.stats$">= 4 FPKM"[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(isoforms.rank.stats$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+##### ISOFORM - DEVREG #####
+
+for (x in 1:length(isoforms.rank.stats$gene_id)) {
+  if (is.na((max(isoforms.rank.stats$P1_FPKM[x], isoforms.rank.stats$P2_FPKM[x], isoforms.rank.stats$YFB_FPKM[x], isoforms.rank.stats$FB_FPKM[x])/min(isoforms.rank.stats$P1_FPKM[x], isoforms.rank.stats$P2_FPKM[x], isoforms.rank.stats$YFB_FPKM[x], isoforms.rank.stats$FB_FPKM[x])))) {
+    isoforms.rank.stats$DEVREG[x] <- NA 
+  } else if ((max(isoforms.rank.stats$P1_FPKM[x], isoforms.rank.stats$P2_FPKM[x], isoforms.rank.stats$YFB_FPKM[x], isoforms.rank.stats$FB_FPKM[x])/min(isoforms.rank.stats$P1_FPKM[x], isoforms.rank.stats$P2_FPKM[x], isoforms.rank.stats$YFB_FPKM[x], isoforms.rank.stats$FB_FPKM[x])) >= 4) {
+    isoforms.rank.stats$DEVREG[x] <- T
+  } else {
+    isoforms.rank.stats$DEVREG[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(isoforms.rank.stats$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+##### ISOFORM - FB-devreg #####
+
+for (x in 1:length(isoforms.rank.stats$gene_id)) {
+  if (isoforms.rank.stats$`>= 4 FPKM`[x] == T & isoforms.rank.stats$DEVREG[x] == T) {
+    isoforms.rank.stats$"FB-devreg"[x] <- T
+  } else {
+    isoforms.rank.stats$"FB-devreg"[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(isoforms.rank.stats$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+isoforms.rank.stats <- isoforms.rank.stats[,c(1:18,21)]
+
+##### ISOFORM - 4 FPKM VM-P1 #####
+
+for (x in 1:length(isoforms.rank.stats$gene_id)) {
+  if (max(isoforms.rank.stats[x,3:4]) >= 4) {
+    isoforms.rank.stats$">= 4 FPKM"[x] <- T
+  } else {
+    isoforms.rank.stats$">= 4 FPKM"[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(isoforms.rank.stats$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+##### ISOFORM - FB-init #####
+
+for (x in 1:length(isoforms.rank.stats$gene_id)) {
+  if (isoforms.rank.stats$`>= 4 FPKM`[x] == T & ((isoforms.rank.stats$P1_FPKM[x] / isoforms.rank.stats$VM_FPKM[x]) >= 4) == T) {
+    isoforms.rank.stats$"FB-init"[x] <- T
+  } else {
+    isoforms.rank.stats$"FB-init"[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(isoforms.rank.stats$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+isoforms.rank.stats <- isoforms.rank.stats[,c(1:19,21)]
+
+##### ISOFORM - devreg-s-stricto #####
+
+for (x in 1:length(isoforms.rank.stats$gene_id)) {
+  if (isoforms.rank.stats$`FB-devreg`[x] == T | isoforms.rank.stats$`FB-init`[x] == T ) {
+    isoforms.rank.stats$"devreg-s-stricto"[x] <- T
+  } else {
+    isoforms.rank.stats$"devreg-s-stricto"[x] <- F
+  }
+  pb <- txtProgressBar(min = 1, max = length(isoforms.rank.stats$gene_id), style = 3)        
+  setTxtProgressBar(pb, x, title = NULL, label = NULL) 
+}
+
+names(isoforms.rank.stats)[19:21] <- c("ISOFORM-FB-devreg", "ISOFORM-FB-init", "ISOFORM-devreg-s-stricto")
+
 ##### ANNOTATION CORRECTION #####
 
 annotation.corrected <- as_tibble()
@@ -145,9 +242,9 @@ sum(unique(annotation.corrected$transcriptID) != isoforms.rank$transcript_id)
 
 ##### WRITE FILES #####
 
-write_tsv(isoforms.rank, "scommune_isoforms.tsv")
+write_tsv(isoforms.rank.stats, "../../CMC_project/scommune/scommune_isoforms.tsv")
 
-write_tsv(genes.AS, "scommune_genes.tsv")
+write_tsv(genes.AS, "../../CMC_project/scommune/scommune_genes.tsv")
 
 annotation.corrected$transcriptID <- annotation.corrected$transcriptID %>% 
   str_replace("^", "\"") %>%
@@ -155,6 +252,6 @@ annotation.corrected$transcriptID <- annotation.corrected$transcriptID %>%
 
 merged <- unite(annotation.corrected, attributes, 9:12, sep = " ")
 
-write.table(merged, file = "scommune_corrected_annotation.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
+write.table(merged, file = "../../CMC_project/scommune/scommune_corrected_annotation.gtf", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 
 
