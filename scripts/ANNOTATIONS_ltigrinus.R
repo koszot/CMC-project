@@ -5,7 +5,7 @@ library(stringr)
 
 ##### LOAD FILES #####
 
-setwd("~/Desktop/MTA_CMC_project/ltigrinus/")
+setwd("~/Desktop/MTA/CMC_project/ltigrinus/")
 
 genes <- read_tsv("ltigrinus_genes.tsv", col_names = T, cols(.default = col_guess(), gene_id = col_character()))
 isoforms <- read_tsv("ltigrinus_isoforms.tsv", col_names = T, cols(.default = col_guess(), gene_id = col_character()))

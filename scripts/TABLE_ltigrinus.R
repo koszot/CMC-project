@@ -5,7 +5,7 @@ library(stringr)
 
 ##### LOAD FILES #####
 
-setwd("~/Desktop/MTA/AS_project/FILES_ltigrinus/")
+setwd("~/Desktop/MTA/AS_project/FILES_ltigrinus_v2/")
 
 isoforms <- read_tsv("EXPRESSION_ltigrinus/isoforms.fpkm_tracking", col_names = T, cols(.default = col_guess(), tracking_id = col_character(), gene_id = col_character()))   
 isoforms <- isoforms %>%
